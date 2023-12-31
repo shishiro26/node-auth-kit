@@ -59,7 +59,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       
       </html>`;
     } else if (template === "passwordReset") {
-      const projectName = process.env.PROJECT_NAME || "node-auth-kit";
+      const projectName = process.env.PROJECT_NAME || "AuthEase";
 
       subject = "Password Reset Requested!";
       text =
@@ -113,7 +113,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       
       </html>`;
     } else if (template === "deleteAccount") {
-      const projectName = process.env.PROJECT_NAME || "node-auth-kit";
+      const projectName = process.env.PROJECT_NAME || "AuthEase";
 
       subject = "Delete Account Requested";
       text =
@@ -173,7 +173,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       </body>
       </html>`;
     } else if (template === "accountDeleted") {
-      const projectName = process.env.PROJECT_NAME || "node-auth-kit";
+      const projectName = process.env.PROJECT_NAME || "AuthEase";
 
       subject = "Account Deleted";
       text =
@@ -222,7 +222,7 @@ export const sendMailer = async (email, otp, Username, template) => {
         </body>
       </html>`;
     } else if (template === "resendOTP") {
-      const projectName = process.env.PROJECT_NAME || "node-auth-kit";
+      const projectName = process.env.PROJECT_NAME || "AuthEase";
 
       subject = "Resend OTP";
       text =
@@ -274,7 +274,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       </html>`;
     }
 
-    const projectName = process.env.PROJECT_NAME || "node-auth-kit";
+    const projectName = process.env.PROJECT_NAME || "AuthEase";
 
     const mailOptions = {
       from: `'${projectName} ||  <${process.env.USER}>`,

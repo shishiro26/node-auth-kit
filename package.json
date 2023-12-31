@@ -1,6 +1,6 @@
 {
-  "name": "node-authkit",
-  "version": "1.0.2",
+  "name": "AuthEase",
+  "version": "1.0.3",
   "description": "It simplifies the login and signup",
   "main": "index.js",
   "type": "module",
@@ -20,17 +20,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shishiro26/node-auth-kit.git"
+    "url": "git+https://github.com/shishiro26/AuthEase.git"
   },
   "keywords": [
-    "node-auth-kit"
+    "AuthEase"
   ],
   "author": "shishiro",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shishiro26/node-auth-kit/issues"
+    "url": "https://github.com/shishiro26/AuthEase/issues"
   },
-  "homepage": "https://github.com/shishiro26/node-auth-kit#readme",
+  "homepage": "https://github.com/shishiro26/AuthEase#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",

@@ -1,1 +1,1 @@
-# node-auth-kit
+# AuthEase
