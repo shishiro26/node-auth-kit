@@ -9,7 +9,7 @@ const runCommand = (command) => {
   }
 };
 const repoName = process.argv[2];
-const gitCheckoutCommand = `git clone --depth 1 https://github.com/shishiro26/autheasy`;
+const gitCheckoutCommand = `git clone --depth 1 https://github.com/shishiro26/node-auth-kit`;
 const installDepsCommand = `cd ${repoName} && npm install`;
 
 console.log(`Cloing the repository with name ${repoName}`);
@@ -20,6 +20,6 @@ if (!checkedOut) process.exit(-1);
 console.log(`Installing dependencies for ${repoName}`);
 const installedDeps = runCommand(installDepsCommand);
 if (!installedDeps) process.exit(-1);
-console.log("Successfully created ")
+console.log("Successfully created ");
 // Change directory back to original location
 console.log(`Done installing dependencies for ${repoName}\n`);
