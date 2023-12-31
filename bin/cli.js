@@ -20,6 +20,6 @@ if (!checkedOut) process.exit(-1);
 console.log(`Installing dependencies for ${repoName}`);
 const installedDeps = runCommand(installDepsCommand);
 if (!installedDeps) process.exit(-1);
+console.log("Successfully created ")
 // Change directory back to original location
-execSync("cd ..");
 console.log(`Done installing dependencies for ${repoName}\n`);
