@@ -1,22 +1,22 @@
 {
-  "name": "node-auth-kit",
-  "version": "1.0.0",
+  "name": "node-authkit",
+  "version": "1.0.2",
   "description": "It simplifies the login and signup",
   "main": "index.js",
   "type": "module",
   "files": [
-    "config/*",
-    "Controllers/*",
-    "middleware/*",
-    "model/*",
-    "routes/*",
-    "utils/*",
-    "index.js/*",
-    "/.env.example"
+    "config/**",
+    "Controllers/**",
+    "middleware/**",
+    "model/**",
+    "routes/**",
+    "utils/**",
+    "index.js",
+    ".env.example"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node ./scripts/copy-files.js"
+    "postinstall": "node -e \"import('./setup.js').then(module => module.default())\""
   },
   "repository": {
     "type": "git",
