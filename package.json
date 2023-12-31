@@ -1,0 +1,37 @@
+{
+  "name": "node-auth-kit",
+  "version": "1.0.0",
+  "description": "It simplifies the login and signup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shishiro26/node-auth-kit.git"
+  },
+  "keywords": [
+    "node-auth-kit"
+  ],
+  "author": "shishiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shishiro26/node-auth-kit/issues"
+  },
+  "homepage": "https://github.com/shishiro26/node-auth-kit#readme",
+  "dependencies": {
+    "multer": "^1.4.5-lts.1",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "date-fns": "^3.0.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.7",
+    "otp-generator": "^4.0.1",
+    "validator": "^13.11.0"
+  }
+}
