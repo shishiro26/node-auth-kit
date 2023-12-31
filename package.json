@@ -1,6 +1,6 @@
 {
-  "name": "AuthEase",
-  "version": "1.0.3",
+  "name": "authease",
+  "version": "1.0.0",
   "description": "It simplifies the login and signup",
   "main": "index.js",
   "type": "module",
@@ -20,17 +20,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shishiro26/AuthEase.git"
+    "url": "git+https://github.com/shishiro26/authease.git"
   },
   "keywords": [
-    "AuthEase"
+    "authease"
   ],
   "author": "shishiro",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shishiro26/AuthEase/issues"
+    "url": "https://github.com/shishiro26/authease/issues"
   },
-  "homepage": "https://github.com/shishiro26/AuthEase#readme",
+  "homepage": "https://github.com/shishiro26/authease#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
