@@ -1,23 +1,14 @@
 {
   "name": "authease",
-  "version": "1.0.1",
+  "version": "1.0.6",
   "description": "It simplifies the login and signup",
   "main": "index.js",
   "type": "module",
-  "files": [
-    "config/**",
-    "Controllers/**",
-    "middleware/**",
-    "model/**",
-    "routes/**",
-    "utils/**",
-    "index.js",
-    ".env.example",
-    ".setup.js"
-  ],
+  "bin": "./bin/cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node -e \"import('./setup.js').then(module => module.default())\""
+    "start": "node index.js",
+    "dev": "node index.js"
   },
   "repository": {
     "type": "git",
