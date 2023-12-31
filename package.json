@@ -1,6 +1,6 @@
 {
   "name": "authease",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "It simplifies the login and signup",
   "main": "index.js",
   "type": "module",
@@ -12,7 +12,8 @@
     "routes/**",
     "utils/**",
     "index.js",
-    ".env.example"
+    ".env.example",
+    ".setup.js"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
