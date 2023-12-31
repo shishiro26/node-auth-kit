@@ -3,8 +3,20 @@
   "version": "1.0.0",
   "description": "It simplifies the login and signup",
   "main": "index.js",
+  "type": "module",
+  "files": [
+    "config/*",
+    "Controllers/*",
+    "middleware/*",
+    "model/*",
+    "routes/*",
+    "utils/*",
+    "index.js/*",
+    "/.env.example"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node ./scripts/copy-files.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +32,6 @@
   },
   "homepage": "https://github.com/shishiro26/node-auth-kit#readme",
   "dependencies": {
-    "multer": "^1.4.5-lts.1",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "date-fns": "^3.0.6",
@@ -30,8 +41,12 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.7",
     "otp-generator": "^4.0.1",
     "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "fs-extra": "^11.2.0"
   }
 }
