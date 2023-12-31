@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "node index.js",
-    "postinstall": "node ./bin/cli.js"
+    "postinstall": "npx husky install"
   },
   "repository": {
     "type": "git",
