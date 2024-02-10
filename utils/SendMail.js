@@ -14,11 +14,11 @@ export const sendMailer = async (email, otp, Username, template) => {
     let subject, text, html;
 
     if (template === "registration") {
-      const projectName = process.env.PROJECT_NAME || "SoulShare"; // Default to "SoulShare" if PROJECT_NAME is not set
+      const projectName = process.env.PROJECT_NAME || "NODGEN";
 
       subject = `Welcome to ${projectName} - Registration OTP`;
       text =
-        `Hello ${UserName},\n\n` +
+        `Hello ${Username},\n\n` +
         `Thank you for choosing ${projectName}! You're just one step away from getting started.` +
         `Here's your OTP for registration:\n\n` +
         `OTP: ${otp}\n\n` +
@@ -43,7 +43,7 @@ export const sendMailer = async (email, otp, Username, template) => {
                 </tr>
                 <tr>
                   <td style="padding: 20px 0;">
-                    <p style="font-size: 18px; color: #333333;">Hello ${UserName},</p>
+                    <p style="font-size: 18px; color: #333333;">Hello ${Username},</p>
                     <p style="font-size: 16px; color: #666666;">Thank you for choosing ${projectName}! You're just one step
                       away from getting started.</p>
                     <p style="font-size: 16px; color: #666666;">Here's your OTP for registration:</p>
@@ -59,7 +59,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       
       </html>`;
     } else if (template === "passwordReset") {
-      const projectName = process.env.PROJECT_NAME || "authease";
+      const projectName = process.env.PROJECT_NAME || "nodgen";
 
       subject = "Password Reset Requested!";
       text =
@@ -113,7 +113,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       
       </html>`;
     } else if (template === "deleteAccount") {
-      const projectName = process.env.PROJECT_NAME || "authease";
+      const projectName = process.env.PROJECT_NAME || "nodgen";
 
       subject = "Delete Account Requested";
       text =
@@ -155,7 +155,7 @@ export const sendMailer = async (email, otp, Username, template) => {
                       If you didn't request this account deletion, please don't hesitate to reach out to us immediately.
                       You can simply reply to this email, and our team will investigate the matter promptly.
                     </p>
-                    <p style="font-size: 16px; color: #666666;">For security reasons, this OTP will expire in 24 hours.</p>
+                    <p style="font-size: 16px; color: #666666;">For security reasons, this Account will expire in 24 hours.</p>
                     <p style="font-size: 16px; color: #666666; margin-top: 20px;">Before deleting your account, please ensure
                       that you've backed up any important data associated with your ${projectName} account.</p>
                   </td>
@@ -173,7 +173,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       </body>
       </html>`;
     } else if (template === "accountDeleted") {
-      const projectName = process.env.PROJECT_NAME || "authease";
+      const projectName = process.env.PROJECT_NAME || "nodgen";
 
       subject = "Account Deleted";
       text =
@@ -222,7 +222,7 @@ export const sendMailer = async (email, otp, Username, template) => {
         </body>
       </html>`;
     } else if (template === "resendOTP") {
-      const projectName = process.env.PROJECT_NAME || "authease";
+      const projectName = process.env.PROJECT_NAME || "nodgen";
 
       subject = "Resend OTP";
       text =
@@ -274,7 +274,7 @@ export const sendMailer = async (email, otp, Username, template) => {
       </html>`;
     }
 
-    const projectName = process.env.PROJECT_NAME || "authease";
+    const projectName = process.env.PROJECT_NAME || "nodgen";
 
     const mailOptions = {
       from: `'${projectName} ||  <${process.env.USER}>`,

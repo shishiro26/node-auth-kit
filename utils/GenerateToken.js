@@ -6,7 +6,7 @@ export const AccessToken = (userId) => {
     const secret = process.env.SECRET_KEY;
     const options = {
       expiresIn: "20m",
-      issuer: "authease",
+      issuer: "nodgen",
       audience: userId.toString(),
     };
     jwt.sign(payload, secret, options, (err, token) => {
@@ -42,7 +42,7 @@ export const RefreshToken = (userId) => {
     const secret = process.env.REFRESH_KEY;
     const options = {
       expiresIn: "30d",
-      issuer: "authease",
+      issuer: "nodgen",
       audience: userId.toString(),
     };
     jwt.sign(payload, secret, options, (err, token) => {
@@ -56,6 +56,7 @@ export const RefreshToken = (userId) => {
 };
 
 export const verifyRefreshToken = (refreshToken) => {
+  console.log("This is the refershtoken", refreshToken);
   return new Promise((resolve, reject) => {
     jwt.verify(refreshToken, process.env.REFRESH_KEY, (err, payload) => {
       if (err) {

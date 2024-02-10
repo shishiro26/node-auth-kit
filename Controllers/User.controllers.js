@@ -1,19 +1,18 @@
 import bcrypt from "bcrypt";
-import User from "../model/User.js";
+import User from "../model/User.model.js";
 import otpGenerator from "otp-generator";
 import { sendMailer } from "../utils/SendMail.js";
 import mongoose from "mongoose";
-import OTP from "../model/OTP.js";
+import OTP from "../model/OTP.model.js";
 import {
   AccessToken,
   RefreshToken,
   verifyRefreshToken,
 } from "../utils/GenerateToken.js";
-/* Registering the user */
+
 export const register = async (req, res) => {
   try {
-    const { firstName, lastName, Username, phoneNumber, email, password } =
-      req.body;
+    const { Username, email, password } = req.body;
 
     const duplicate = await User.findOne({ email }).lean().exec();
     if (duplicate) {
@@ -34,12 +33,9 @@ export const register = async (req, res) => {
 
     const user = await User.create({
       Username,
-      firstName,
-      lastName,
-      phoneNumber,
       email,
       password: hashedPwd,
-      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+      image: `https://api.dicebear.com/5.x/initials/svg?seed=${Username}`,
       isVerified: false,
     });
 
@@ -64,10 +60,8 @@ export const register = async (req, res) => {
     });
 
     res.status(201).json({
-      accessToken,
-      refreshToken,
-      userId: user._id,
-      email: user.email,
+      message:
+        "User registered successfully. Please verify your email to login. OTP sent to your email.",
     });
   } catch (error) {
     console.error("Error during registration:", error);
@@ -86,6 +80,7 @@ export const login = async (req, res) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid) {
       throw new Error("Invalid credentials");
     }
@@ -105,14 +100,10 @@ export const login = async (req, res) => {
     });
 
     res.status(200).json({
-      accessToken,
-      refreshToken,
-      userId: user._id,
-      email: user.email,
+      message: "Logged in successfully",
     });
   } catch (err) {
     console.error(err);
-
     let errorMessage = "Internal server error. Please try again later.";
     if (err.message === "User not found") {
       res.status(404);
@@ -127,8 +118,13 @@ export const login = async (req, res) => {
 
 export const updatePassword = async (req, res) => {
   try {
-    const { id } = req.params;
-    const userDetails = await User.findById(id);
+    const id = req?.payload.aud;
+    const { oldPassword, newPassword } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid user ID format");
+    }
+    const userDetails = await User.findById({ _id: id });
 
     if (!userDetails) {
       throw new Error("User not found");
@@ -137,14 +133,9 @@ export const updatePassword = async (req, res) => {
     if (!userDetails.isVerified) {
       throw new Error("User is not verified");
     }
+    const salt = await bcrypt.genSalt();
 
-    const { oldPassword, newPassword, confirmNewPassword } = req.body;
-
-    if (newPassword !== confirmNewPassword) {
-      throw new Error("New passwords do not match");
-    }
-
-    const isPasswordMatch = await bcrypt.compare(
+    const isPasswordMatch = bcrypt.compareSync(
       oldPassword,
       userDetails.password
     );
@@ -153,7 +144,6 @@ export const updatePassword = async (req, res) => {
       throw new Error("Invalid old password");
     }
 
-    const salt = await bcrypt.genSalt();
     const hashedPwd = await bcrypt.hash(newPassword, salt);
 
     await User.findByIdAndUpdate(id, { password: hashedPwd });
@@ -182,7 +172,7 @@ export const updatePassword = async (req, res) => {
 /*Updating the image*/
 export const updateImage = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req?.payload.aud;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new Error("Invalid user ID format");
@@ -203,7 +193,6 @@ export const updateImage = async (req, res) => {
     }
 
     const base64Image = req?.file?.buffer.toString("base64");
-
     await User.findByIdAndUpdate(id, { image: base64Image });
 
     res.status(200).json({ message: "Image updated successfully" });
@@ -243,14 +232,14 @@ export const logout = (req, res) => {
 /* Get the user Info */
 export const userInfo = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req?.payload.aud;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new Error("Invalid user ID format");
     }
 
-    if (req.payload.aud !== id) {
-      throw new Error("Invalid access token");
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid user ID format");
     }
 
     const user = await User.findById(id);
@@ -284,102 +273,32 @@ export const userInfo = async (req, res) => {
   }
 };
 
-/* Delete the user with the delayed deletion  */
-export const deleteUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { email } = req.body;
-    const userDetails = await User.findOne({ _id: id })
-      .select("-password")
-      .exec();
-
-    if (!userDetails) {
-      return res.status(409).json("No such user found");
-    }
-
-    if (userDetails.isVerified) {
-      const { otp } = req.body;
-      const foundOTP = await OTP.findOne({ email, otp }).exec();
-
-      if (foundOTP) {
-        await User.findOneAndUpdate({ _id: id }, { markedForDeletion: true });
-
-        sendMailer(email, otp, userDetails.Username, "accountDeleted");
-        if (userDetails.markedForDeletion === true) {
-          setTimeout(async () => {
-            try {
-              await User.deleteOne({ _id: id });
-              const likedEmail = await Email.deleteOne({
-                email: userDetails.email,
-              });
-              if (!likedEmail) {
-                console.log(`${userDetails.email} do not exist!! `);
-              }
-              res.cookie("AccessToken", "", {
-                httpOnly: true,
-                expires: new Date(0),
-              });
-              res.cookie("RefreshToken", "", {
-                httpOnly: true,
-                expires: new Date(0),
-              });
-              res.status(200).json({ message: "user logged out successfully" });
-              console.log(
-                "User and email is deleted and loggedout successfully"
-              );
-            } catch (err) {
-              console.log(`Error in the setTimeout${err.message}`);
-            }
-          }, 1000 * 60 * 60);
-        }
-        return res.status(200).json("User Deleted Successfully");
-      } else {
-        return res.status(400).json("OTP doesn't match");
-      }
-    } else {
-      return res.status(401).json("Verify Your Email");
-    }
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-export const refreshroute = async (req, res) => {
+export const refreshToken = async (req, res, next) => {
   try {
     const refreshToken = req.cookies.RefreshToken;
     if (!refreshToken) {
-      return res.status(401).json({ error: "Refresh token missing" });
+      throw new Error("Refresh token not found");
     }
-
     const userId = await verifyRefreshToken(refreshToken);
-    if (!userId) {
-      return res.status(401).json({ error: "Invalid refresh token" });
-    }
-
     const accessToken = await AccessToken(userId);
     const refToken = await RefreshToken(userId);
 
     res.cookie("AccessToken", accessToken, {
-      httpOnly: true,
       secure: true,
+      httpOnly: true,
       sameSite: "strict",
       maxAge: 20 * 60 * 1000,
     });
+
     res.cookie("RefreshToken", refToken, {
-      httpOnly: true,
       secure: true,
+      httpOnly: true,
       sameSite: "strict",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ AccessToken: accessToken, refreshToken: refToken });
+    res.status(200).json({ accessToken: accessToken, refreshToken: refToken });
   } catch (error) {
-    if (error.name === "JsonWebTokenError") {
-      return res.status(401).json({ error: "Invalid refresh token" });
-    } else if (error.name === "TokenExpiredError") {
-      return res.status(401).json({ error: "Refresh token expired" });
-    } else {
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
+    next(error);
   }
 };

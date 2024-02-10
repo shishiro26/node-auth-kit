@@ -1,5 +1,5 @@
-import OTP from "../model/OTP.js";
-import User from "../model/User.js";
+import OTP from "../model/OTP.model.js";
+import User from "../model/User.model.js";
 import otpGenerator from "otp-generator";
 import { sendMailer } from "../utils/SendMail.js";
 
@@ -20,7 +20,7 @@ export const verifyOtp = async (req, res) => {
 
     res.status(200).json({ message: "User verified successfully" });
   } catch (err) {
-    console.error(err); 
+    console.error(err);
     if (err.message === "Invalid OTP") {
       res.status(401).json({ error: err.message });
     } else if (err.message === "User not found") {
@@ -31,10 +31,9 @@ export const verifyOtp = async (req, res) => {
   }
 };
 
-/* Resending the OTP */
 export const resendOtp = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req?.payload.aud;
     const user = await User.findById(id);
     if (!user) {
       throw new Error("User not found");
@@ -44,7 +43,7 @@ export const resendOtp = async (req, res) => {
     const email = user.email;
 
     await OTP.create({ otp, email });
-    sendMailer(email, otp, user.UserName, "resendOTP");
+    sendMailer(email, otp, user.Username, "resendOTP");
 
     res.status(200).json({ message: "OTP sent successfully" });
   } catch (err) {
@@ -53,40 +52,6 @@ export const resendOtp = async (req, res) => {
       res.status(404).json({ error: err.message });
     } else {
       res.status(500).json({ error: "Failed to resend OTP" });
-    }
-  }
-};
-
-/* Verifying the OTP sent for account deletion */
-export const sendDeleteOtp = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { email } = req.body;
-
-    const user = await User.findById(id);
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    if (user.email !== email) {
-      throw new Error("Unauthorized email");
-    }
-
-    const otp = otpGenerator.generate(6, { digits: true });
-    await OTP.create({ otp, email });
-    sendMailer(email, otp, user.UserName, "deleteAccount");
-
-    res.status(200).json({ message: "OTP sent successfully" });
-  } catch (err) {
-    console.error(err);
-    if (err.message === "User not found") {
-      res.status(404).json({ error: err.message });
-    } else if (err.message === "Unauthorized email") {
-      res.status(401).json({ error: err.message });
-    } else {
-      res
-        .status(500)
-        .json({ error: "Failed to send OTP for account deletion" });
     }
   }
 };
