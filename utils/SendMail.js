@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer";
 import {
-  ACCOUNT_DELETED,
-  DELETE_ACCOUNT,
   REGISTRATION_TEMPLATES,
   RESEND_OTP,
   RESET_PASSWORD,
@@ -13,10 +11,6 @@ const getTemplate = (template) => {
       return REGISTRATION_TEMPLATES;
     case "passwordReset":
       return RESET_PASSWORD;
-    case "deleteAccount":
-      return DELETE_ACCOUNT;
-    case "accountDeleted":
-      return ACCOUNT_DELETED;
     case "resendOTP":
       return RESEND_OTP;
     default:
