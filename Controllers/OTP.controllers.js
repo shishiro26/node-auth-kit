@@ -33,7 +33,7 @@ export const verifyOtp = async (req, res) => {
 
 export const resendOtp = async (req, res) => {
   try {
-    const { id } = req?.payload.aud;
+    const  id  = req?.payload.aud;
     const user = await User.findById(id);
     if (!user) {
       throw new Error("User not found");
